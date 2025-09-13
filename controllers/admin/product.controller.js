@@ -30,6 +30,18 @@ module.exports.index = async (req, res) => {
         find.title = objectSearch.regex;
     }
 
+    //Sort
+
+    let sort = {}
+
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
+    }
+    else {
+        sort.position = "desc"
+    }
+    //End Sort
+
 
     //Đoạn phân trang
     const countProducts = await Product.countDocuments(find);
@@ -40,7 +52,7 @@ module.exports.index = async (req, res) => {
 
     //    await objectPagination(req, find);
 
-    const products = await Product.find(find).sort({ position: "desc" }).limit(objectPagination.limitItems).skip(objectPagination.skip)
+    const products = await Product.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip)
     // console.log(products);
 
     res.render("admin/pages/products/index", { title: "Trang sản phẩm", products: products, filterStatus: filterStatus, query: req.query, keyword: objectSearch.keyword, pagination: objectPagination });
@@ -177,8 +189,8 @@ module.exports.editPatch = async (req, res) => {
     }
 }
 
-module.exports.detail = async(req,res)=>{
-    try{
+module.exports.detail = async (req, res) => {
+    try {
         const find = {
             deleted: false,
             _id: req.params.id
@@ -187,7 +199,7 @@ module.exports.detail = async(req,res)=>{
         console.log(product)
         res.render("admin/pages/products/detail", { title: product.title, product: product });
     }
-    catch(err){
+    catch (err) {
         req.flash('error', 'Không tìm thấy sản phẩm');
         res.redirect(`${systemConfig.prefixAdmin}/products`);
     }
