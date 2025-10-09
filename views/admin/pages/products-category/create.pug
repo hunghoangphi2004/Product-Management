@@ -1,16 +1,14 @@
 extends ../../layouts/default.pug
+include ../../mixins/select-tree.pug
 
 block main
     include ../../mixins/alert.pug
-    include ../../mixins/select-tree.pug
     +alert-error(5000)
-    +alert-success(5000)
 
     h1(class="mb-4") Thêm mới sản phẩm
 
     form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
+        action=`${prefixAdmin}/products-category/create`
         method="POST"
         enctype="multipart/form-data"
     )
@@ -24,13 +22,20 @@ block main
                 name="title"
                 required
             )
-
+        //- Danh mục cha
         div(class="form-group")
-            label(for="product_category_id") Danh mục
-            select(name="product_category_id" id="product_category_id" class="form-control")
-                option(value="") -- Chọn danh mục --
-                if category
-                    +select-tree(category)
+            label(for="parent_id") Danh mục cha
+            //- input(
+            //-     type="text"
+            //-     class="form-control"
+            //-     id="parent_id"
+            //-     name="parent_id"
+            //- )
+            select(name="parent_id" id="parent_id" class="form-control")
+                option(value="") -- Chọn danh mục cha --
+                if records
+                    +select-tree(records)
+        
 
         //- Mô tả
         div(class="form-group")
@@ -40,45 +45,6 @@ block main
                 id="desc"
                 name="description"
                 rows="5"
-            )
-
-        //- Giá
-        div(class="form-group")
-            label(for="price") Giá
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                value="0"
-                min="0"
-                required
-            )
-
-        //- Giảm giá
-        div(class="form-group")
-            label(for="discount") Giảm giá (%)
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-                max="100"
-            )
-
-        //- Số lượng
-        div(class="form-group")
-            label(for="stock") Số lượng
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value="0"
-                 min="0"
-                required
             )
 
         //- Ảnh
@@ -143,6 +109,5 @@ block main
             ) Tạo mới
 
     script(src="/admin/js/product.js")
-
 
 

@@ -4,8 +4,10 @@ const filterStatusHelper = require("../../helpers/filterStatus.js")
 const searchHelper = require("../../helpers/search.js");
 const paginationHelper = require("../../helpers/pagination.js");
 const systemConfig = require("../../config/system.js")
+const createTreeHelper = require("../../helpers/createTree.js");
 
 const Product = require("../../models/product.model.js");
+const ProductCategory = require("../../models/product-category.model.js");
 
 module.exports.index = async (req, res) => {
     // console.log(req.query.status)
@@ -120,7 +122,13 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
-    res.render("admin/pages/products/create", { title: "Thêm sản phẩm" });
+    let find = {
+        deleted: false,
+    };
+
+    const category = await ProductCategory.find(find).sort({ position: 'desc' });
+    const newCategory = createTreeHelper.tree(category)
+    res.render("admin/pages/products/create", { title: "Thêm sản phẩm", category: newCategory });
 }
 
 // [POST] /admin/products/create
@@ -143,6 +151,7 @@ module.exports.createPost = async (req, res) => {
     const product = new Product(req.body, deleted = false);
 
     await product.save();
+    req.flash('success', `Thêm thành công 1 sản phẩm`);
 
     res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
@@ -155,10 +164,14 @@ module.exports.edit = async (req, res) => {
             deleted: false,
             _id: req.params.id
         }
+        const category = await ProductCategory.find({
+            deleted: false,
+        });
+        const newCategory = createTreeHelper.tree(category)
 
         const product = await Product.findOne(find)
         console.log(product);
-        res.render("admin/pages/products/edit", { title: "Chỉnh sửa sản phẩm", product: product });
+        res.render("admin/pages/products/edit", { title: "Chỉnh sửa sản phẩm", product: product, category: newCategory });
     } catch (error) {
         req.flash('error', 'Không tìm thấy sản phẩm');
         res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -175,10 +188,6 @@ module.exports.editPatch = async (req, res) => {
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
 
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-
-    }
     try {
         await Product.updateOne({ _id: id }, req.body);
         req.flash('success', 'Cập nhật sản phẩm thành công');

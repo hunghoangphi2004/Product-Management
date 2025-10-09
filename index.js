@@ -3,6 +3,7 @@ require('dotenv').config()
 const route = require('./routes/client/index.route.js')
 const database = require('./config/database')
 const app = express()
+var path = require('path');
 const port = process.env.PORT;
 const adminRoute = require('./routes/admin/index.route.js')
 var methodOverride = require('method-override')
@@ -34,6 +35,11 @@ app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 // End flash
 //end flash
+
+//tiny mce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+//end tiny mce
+
 
 
 route(app)
