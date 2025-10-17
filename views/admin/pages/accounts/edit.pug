@@ -1,0 +1,120 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-error(5000)
+    +alert-success(5000)
+
+    h1(class="mb-4") Chỉnh sửa tài khoản
+
+    form(
+        action=`${prefixAdmin}/accounts/edit/${data.id}?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        //- Họ tên
+        div(class="form-group")
+            label(for="fullname") Họ tên *
+            input(
+                type="text"
+                class="form-control"
+                id="fullname"
+                name="fullname"
+                value=data.fullname
+                required
+            )
+
+        //- Email
+        div(class="form-group")
+            label(for="email") Email *
+            input(
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                value=data.email
+                required
+            )
+
+        //- Mật khẩu
+        div(class="form-group")
+            label(for="password") Mật khẩu *
+            input(
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+            )
+
+        //- Số điện thoại
+        div(class="form-group")
+            label(for="phone") Số điện thoại
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value=data.phone
+            )
+
+        //- Ảnh đại diện
+        div(class="form-group" upload-image)
+            label(for="avatar") Ảnh đại diện
+            br
+            input(
+                type="file"
+                class="form-control-file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                upload-image-input
+            )
+            if data.avatar
+                img(
+                    src=data.avatar
+                    alt=data.fullname
+                    upload-image-preview
+                    class="image-preview"
+                )
+
+        //- Vai trò
+        div(class="form-group")
+            label(for="roleId") Vai trò
+            select(name="roleId" id="roleId" class="form-control")
+                each item in roles
+                    option(
+                        value=item.id
+                        selected=(item.id == data.roleId)
+                    ) #{item.title}
+
+        //- Trạng thái
+        div(class="form-group form-check form-check-inline")
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusActive"
+                name="status"
+                value="active"
+                checked=(data.status === 'active' ? true : false)
+            )
+            label(for="statusActive" class="form-check-label") Hoạt động
+
+        div(class="form-group form-check form-check-inline")
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusInactive"
+                name="status"
+                value="inactive"
+                checked=(data.status === 'inactive' ? true : false)
+            )
+            label(for="statusInactive" class="form-check-label") Dừng hoạt động
+
+        //- Nút cập nhật
+        div(class="form-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Cập nhật
+
+    script(src="/admin/js/account.js")

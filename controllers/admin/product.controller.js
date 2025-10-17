@@ -6,8 +6,10 @@ const paginationHelper = require("../../helpers/pagination.js");
 const systemConfig = require("../../config/system.js")
 const createTreeHelper = require("../../helpers/createTree.js");
 
+
 const Product = require("../../models/product.model.js");
 const ProductCategory = require("../../models/product-category.model.js");
+const Account = require("../../models/account.model.js")
 
 module.exports.index = async (req, res) => {
     // console.log(req.query.status)
@@ -55,6 +57,21 @@ module.exports.index = async (req, res) => {
     //    await objectPagination(req, find);
 
     const products = await Product.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip)
+    for (const product of products) {
+        //Lấy ra thông tin người tạo
+        const user = await Account.findOne({ _id: product.createdBy.account_id })
+        if (user) {
+            product.accountFullName = user.fullname;
+        }
+
+        //Lấy ra thông tin người cập nhật gần nhất
+        const updatedBy = product.updatedBy[product.updatedBy.length - 1];
+        if (updatedBy) {
+            const userUpdated = await Account.findOne({ _id: updatedBy.account_id })
+            updatedBy.accountFullName = userUpdated.fullname;
+        }
+
+    }
     // console.log(products);
 
     res.render("admin/pages/products/index", { title: "Trang sản phẩm", products: products, filterStatus: filterStatus, query: req.query, keyword: objectSearch.keyword, pagination: objectPagination });
@@ -66,7 +83,12 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
-    await Product.updateOne({ _id: id }, { status: status })
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
+
+    await Product.updateOne({ _id: id }, { status: status, $push: { updatedBy: updatedBy } })
 
     req.flash('success', 'Cập nhật trạng thái thành công');
 
@@ -77,31 +99,39 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
-    console.log("req.body:", req.body);
+    // console.log("req.body:", req.body);
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
 
     switch (type) {
         case "active":
-            console.log(ids)
-            await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+            // console.log(ids)
+            await Product.updateMany({ _id: { $in: ids } }, { status: "active", $push: { updatedBy: updatedBy } });
             req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm`);
 
             break;
         case "inactive":
-            console.log(ids)
-            await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+            // console.log(ids)
+            await Product.updateMany({ _id: { $in: ids } }, { status: "inactive", $push: { updatedBy: updatedBy } });
             req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm`);
             break;
         case "delete-all":
-            console.log(ids)
-            await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() });
+            // console.log(ids)
+            await Product.updateMany({ _id: { $in: ids } }, {
+                deleted: true,
+                //  deletedAt: new Date(), 
+                deletedBy: { account_id: res.locals.user.id, deletedAt: new Date() }
+            });
             req.flash('success', `Xoá thành công ${ids.length} sản phẩm`);
             break;
         case "change-position":
-            console.log(ids);
+            // console.log(ids);
             for (const item of ids) {
                 let [id, position] = item.split('-');
                 position = parseInt(position);
-                await Product.updateOne({ _id: id }, { position: position });
+                await Product.updateOne({ _id: id }, { position: position, $push: { updatedBy: updatedBy } });
                 req.flash('success', `Cập nhật vị trí thành công ${ids.length} sản phẩm`);
             }
             break;
@@ -115,7 +145,7 @@ module.exports.changeMulti = async (req, res) => {
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
-    await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() });
+    await Product.updateOne({ _id: id }, { deleted: true, deletedBy: { account_id: res.locals.user.id, deletedAt: new Date() } });
     req.flash('success', `Xoá thành công 1 sản phẩm`);
     res.redirect(req.get("referer"));
 }
@@ -148,6 +178,10 @@ module.exports.createPost = async (req, res) => {
 
     // }
 
+    req.body.createdBy = {
+        account_id: res.locals.user.id
+    }
+
     const product = new Product(req.body, deleted = false);
 
     await product.save();
@@ -170,7 +204,7 @@ module.exports.edit = async (req, res) => {
         const newCategory = createTreeHelper.tree(category)
 
         const product = await Product.findOne(find)
-        console.log(product);
+        // console.log(product);
         res.render("admin/pages/products/edit", { title: "Chỉnh sửa sản phẩm", product: product, category: newCategory });
     } catch (error) {
         req.flash('error', 'Không tìm thấy sản phẩm');
@@ -189,7 +223,15 @@ module.exports.editPatch = async (req, res) => {
     req.body.stock = parseInt(req.body.stock);
 
     try {
-        await Product.updateOne({ _id: id }, req.body);
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        }
+
+        await Product.updateOne({ _id: id }, {
+            ...req.body,
+            $push: { updatedBy: updatedBy }
+        });
         req.flash('success', 'Cập nhật sản phẩm thành công');
         res.redirect(req.get("referer"));
     } catch (error) {
@@ -205,7 +247,7 @@ module.exports.detail = async (req, res) => {
             _id: req.params.id
         };
         const product = await Product.findOne(find);
-        console.log(product)
+        // console.log(product)
         res.render("admin/pages/products/detail", { title: product.title, product: product });
     }
     catch (err) {

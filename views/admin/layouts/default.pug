@@ -8,16 +8,14 @@ html
     link(rel="stylesheet", href = '/admin/css/style.css')
 
   body
-
-    include ../partials/header.pug
-  
-    .body 
-
-      include ../partials/sider.pug
-  
-
-      .main 
-        block main
+    if(role.permissions.length > 0)
+      include ../partials/header.pug
+      .body
+        include ../partials/sider.pug
+        .main 
+          block main
+    else 
+      h1 Bạn không có quyền truy cập
 
   
     //- script(src="/js/script.js")

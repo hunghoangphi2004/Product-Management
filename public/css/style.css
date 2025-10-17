@@ -1,4 +1,4 @@
-.header{
+.header {
     border-bottom: 1px solid #ddd;
 }
 
@@ -7,7 +7,7 @@
     max-width: 100%;
 }
 
-.header .inner-menu > ul{
+.header .inner-menu>ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -17,7 +17,7 @@
     flex-wrap: wrap;
 }
 
-.header .inner-menu > ul > li {
+.header .inner-menu>ul>li {
     margin-left: 20px;
 }
 
@@ -37,6 +37,7 @@
     font-weight: 600;
     color: green;
 }
+
 /* End box-head */
 
 /* product-item */
@@ -45,11 +46,99 @@
     border-radius: 8px;
     text-align: center;
 }
-.product-item img{
+
+
+.product-item .inner-image {
     width: 100%;
-    height: auto;
+    aspect-ratio: 4/3;
+    border-bottom: 1px solid #ddd;
+    position: relative;
 }
 
-.product-item .inner-price-old{
+.product-item .inner-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-item .inner-featured {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: green;
+    color: white;
+    padding: 3px 6px;
+    font-size: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.product-item .inner-price-old {
     text-decoration: line-through;
 }
+
+/* product-detail */
+.product-detail .inner-thumb img {
+  width: 100%;
+  height: auto;
+}
+
+.product-detail .inner-title {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.product-detail .inner-category {
+  margin-bottom: 10px;
+}
+
+.product-detail .inner-price-new {
+  color: green;
+  font-weight: 600;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+
+/* Start sub-menu */
+.sub-menu {
+    position: relative;
+    z-index: 999;
+}
+
+.sub-menu ul {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #eae9e9;
+    min-width: 180px;
+    display: none;
+}
+
+.sub-menu ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sub-menu:hover>ul {
+    display: block;
+}
+
+.sub-menu ul li {
+    position: relative;
+}
+
+.sub-menu ul li ul {
+    right: 100%;
+    top: 0;
+}
+
+.sub-menu ul li:hover>ul {
+    display: block;
+}
+
+/* End sub-menu */

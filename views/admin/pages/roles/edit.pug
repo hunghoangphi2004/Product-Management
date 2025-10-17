@@ -6,38 +6,40 @@ block main
     +alert-error(5000)
     +alert-success(5000)
 
-    h1(class="mb-4") Chỉnh sửa nhóm quyền
+    if(role.permissions.includes("roles_edit"))
 
-    form(
-        action=`${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
-        method="POST"
-    )
-        //- Tiêu đề
-        div(class="form-group")
-            label(for="title") Tiêu đề
-            input(
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                value=role.title
-                required
-            )
+        h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-        //- Mô tả
-        div(class="form-group")
-            label(for="desc") Mô tả
-            textarea(
-                class="form-control"
-                id="desc"
-                name="description"                
-            ) #{role.description}
+        form(
+            action=`${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
+            method="POST"
+        )
+            //- Tiêu đề
+            div(class="form-group")
+                label(for="title") Tiêu đề
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    value=role.title
+                    required
+                )
 
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Cập nhật
+            //- Mô tả
+            div(class="form-group")
+                label(for="desc") Mô tả
+                textarea(
+                    class="form-control"
+                    id="desc"
+                    name="description"                
+                ) #{role.description}
+
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật
 
     script(src="/admin/js/script.js")
 

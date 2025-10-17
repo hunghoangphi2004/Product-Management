@@ -1,4 +1,4 @@
-const Role = require('../../models/role.model')
+const Role = require('../../models/role.model.js')
 const systemConfig = require("../../config/system.js")
 
 
@@ -41,7 +41,7 @@ module.exports.edit = async (req, res) => {
 module.exports.editPatch = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(req.body)
+        // console.log(req.body)
 
         await Role.updateOne({ _id: id }, req.body)
         req.flash('success', 'Cập nhật nhóm quyền thành công');

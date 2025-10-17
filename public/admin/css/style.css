@@ -15,6 +15,10 @@
 /* End Header */
 
 /* Body */
+a{
+    text-decoration: none;
+}
+
 body .sider {
     width: 150px;
     background: #323232;

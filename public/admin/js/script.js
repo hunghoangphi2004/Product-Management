@@ -107,7 +107,7 @@ if (formChangeMulti) {
         console.log(typeChange)
 
         if (typeChange === "delete-all") {
-            const isConfirm = alert("Bạn có chắc chắn muốn xoá các mục đã chọn không?");
+            const isConfirm = confirm("Bạn có chắc chắn muốn xoá các mục đã chọn không?");
             if (!isConfirm) {
                 return;
             }

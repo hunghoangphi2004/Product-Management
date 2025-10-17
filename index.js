@@ -8,6 +8,7 @@ const port = process.env.PORT;
 const adminRoute = require('./routes/admin/index.route.js')
 var methodOverride = require('method-override')
 var bodyParser = require('body-parser')
+const moment =require("moment")
 
 
 const flash = require('express-flash')
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // App local variables
 const systemConfig = require("./config/system.js")
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
 
 database.connect();
 

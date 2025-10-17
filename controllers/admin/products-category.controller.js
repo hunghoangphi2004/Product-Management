@@ -15,6 +15,7 @@ module.exports.index = async (req, res) => {
 
     const records = await ProductCategory.find(find).sort({ position: 'desc' });
     const newRecords = createTreeHelper.tree(records)
+    console.log(newRecords)
     res.render("admin/pages/products-category/index", { title: "Trang danh mục sản phẩm", records: newRecords });
 }
 
@@ -30,7 +31,7 @@ module.exports.create = async (req, res) => {
     res.render("admin/pages/products-category/create", { title: "Tạo danh mục sản phẩm", records: newRecords });
 }
 module.exports.createPost = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     if (req.body.position == "") {
         const count = await ProductCategory.countDocuments();
         req.body.position = count + 1;
@@ -49,7 +50,7 @@ module.exports.edit = async (req, res) => {
 
     try {
         const id = req.params.id;
-        console.log(id)
+        // console.log(id)
         const find = {
             deleted: false,
             _id: req.params.id
