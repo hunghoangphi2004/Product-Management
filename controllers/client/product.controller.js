@@ -7,14 +7,12 @@ const productsCategoryHelper = require("../../helpers/products-category.js")
 module.exports.index = async (req, res) => {
     const products = await Products.find({ status: "active", deleted: false }).sort({ position: "desc" });
     const newProducts = productsHelper.priceNewProducts(products)
-    console.log(newProducts)
 
     res.render("clients/pages/products/index.pug", { title: "Trang danh sách sản phẩm", products: newProducts })
 }
 
 module.exports.detail = async (req, res) => {
     try {
-        console.log(req.params.slugProduct)
         const find = {
             deleted: false,
             slug: req.params.slugProduct,
