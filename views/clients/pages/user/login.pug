@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.my-5
+        .row.justify-content-center
+            .col-8
+                h1(class="text-center") Đăng nhập tài khoản
+                form(action="/user/login", method="POST")
+                    div(class="form-group")
+                        label(for="email") Email
+                        input(
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            required
+                        )
+
+                    div(class="form-group")
+                        label(for="password") Mật khẩu
+                        input(
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            required
+                        )
+
+                    button(type="submit" class="btn btn-primary mt-3 w-100") Đăng nhập
+
+                    a(href="/user/password/forgot") Quên mật khẩu?
