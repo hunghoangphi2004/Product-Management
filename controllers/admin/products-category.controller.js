@@ -53,10 +53,11 @@ module.exports.edit = async (req, res) => {
         // console.log(id)
         const find = {
             deleted: false,
-            _id: req.params.id
+            _id: id
         }
 
         const productCategory = await ProductCategory.findOne(find)
+        console.log(productCategory)
 
         const records = await ProductCategory.find({
             deleted: false
@@ -65,7 +66,7 @@ module.exports.edit = async (req, res) => {
 
         res.render("admin/pages/products-category/edit", { title: "Chỉnh sửa sản phẩm", productCategory: productCategory, records: newRecords });
     } catch (error) {
-        req.flash('error', 'Không tìm thấy sản phẩm');
+        req.flash('error', 'Không tìm thấy danh mục sản phẩm');
         res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     }
 
@@ -74,11 +75,13 @@ module.exports.edit = async (req, res) => {
 // [PATCH] /admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
     try {
+        const id = req.params.id;
         req.body.position = parseInt(req.body.position)
         await ProductCategory.updateOne({ _id: id }, req.body);
         req.flash('success', 'Cập nhật sản phẩm thành công');
         res.redirect(req.get("referer"));
     } catch (error) {
+        console.log(error)
         req.flash('error', 'Cập nhật sản phẩm thất bại');
         res.redirect(req.get("referer"));
     }
