@@ -1,6 +1,5 @@
 const crypto = require("crypto");
 const qs = require("qs");
-const dateFormat = require("dateformat/lib/dateformat");
 
 
 const vnp_TmnCode = process.env.VNP_TMN_CODE;
