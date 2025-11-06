@@ -12,16 +12,23 @@ const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware.js")
 router.get('/', controller.index)
 router.get('/create', controller.create)
 router.post(
-    "/create", upload.single('thumbnail'), uploadCloud.upload ,
+    "/create", upload.single('thumbnail'), uploadCloud.upload,
     validate.createPost,
     controller.createPost
 )
 
+router.patch("/change-status/:status/:id", controller.changeStatus)
+
+router.patch("/change-multi", controller.changeMulti)
+
 router.get('/edit/:id', controller.edit)
 router.patch(
-    "/edit/:id", upload.single('thumbnail'), uploadCloud.upload ,
+    "/edit/:id", upload.single('thumbnail'), uploadCloud.upload,
     validate.createPost,
     controller.editPatch
 )
+
+router.delete("/delete/:id", controller.deleteItem)
+router.get("/detail/:id", controller.detail)
 
 module.exports = router

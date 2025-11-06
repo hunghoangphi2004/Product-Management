@@ -1,4 +1,3 @@
-console.log("OK")
 const inputsQuantity = document.querySelectorAll("input[name='quantity']")
 if (inputsQuantity.length > 0) {
     inputsQuantity.forEach(input => {

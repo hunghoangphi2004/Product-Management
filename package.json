@@ -13,6 +13,7 @@
     "body-parser": "^2.2.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
+    "dateformat": "^5.0.3",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-flash": "^0.0.2",
@@ -27,7 +28,8 @@
     "nodemailer": "^7.0.10",
     "pug": "^3.0.3",
     "streamifier": "^0.1.1",
-    "tinymce": "^8.1.2"
+    "tinymce": "^8.1.2",
+    "vnpay": "^2.4.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

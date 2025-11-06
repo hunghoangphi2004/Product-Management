@@ -12,7 +12,6 @@ module.exports.register = async (req, res) => {
 
 // [POST] /user/register
 module.exports.registerPost = async (req, res) => {
-    console.log(req.body)
     const existEmail = await User.findOne({ email: req.body.email })
 
     if (existEmail) {
@@ -137,8 +136,7 @@ module.exports.otpPasswordPost = async (req, res) => {
         email: email,
         otp: otp
     });
-
-    console.log(result)
+S
     if (!result) {
         req.flash("error", "OTP không hợp lệ");
         res.redirect(req.get("referer"));

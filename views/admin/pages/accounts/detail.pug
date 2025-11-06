@@ -1,0 +1,38 @@
+extend ../../layouts/default.pug
+
+block main 
+    h1 Chi tiết tài khoản
+
+    if (account.title)
+    h1(class="mb-4") #{account.fullname}
+
+    if (account.email)
+        div(class="mb-4") Email: <b>#{account.email}</b>
+
+    if (account.phone)
+        div(class="mb-4") Số điện thoại: <b>#{account.phone}</b>
+
+    if (account.roleId)
+        div(class="mb-4") Vai trò: <b>#{account.role}</b>
+
+    if (account.avatar)
+        div(class="mb-4")
+        img(
+            src=account.avatar
+            style="width: 100px"
+        )
+
+    if (account.status)
+        div(class="mb-4")
+        span Trạng thái: 
+        if (account.status === "active")
+            span(class="btn btn-success") Hoạt động
+        else
+            span(class="btn btn-danger") Ngưng hoạt động
+        <br>
+
+    a( 
+        href = `${prefixAdmin}/accounts/edit/${account.id}`
+        class="btn btn-warning btn-sm") Sửa
+
+    script(src="admin/js/account.js")

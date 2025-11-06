@@ -1,0 +1,72 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  h1(class="mb-4") Chi tiết đơn hàng
+
+  //- Thông tin chung
+  .card.mb-3
+    .card-header Thông tin đơn hàng
+    .card-body
+      p
+        strong Trạng thái:
+        if order.status == 'paid'
+          span.text-success Đã thanh toán
+        else
+          span.text-danger Chưa thanh toán
+      p
+        strong Ngày tạo:
+        |  
+        +formatDateTime(order.createdAt)
+      p
+        strong Người đặt hàng:
+        |  #{order.userInfo.fullname}
+      p
+        strong Số điện thoại:
+        |  #{order.userInfo.phone}
+      p
+        strong Địa chỉ:
+        |  #{order.userInfo.address}
+
+  //- Danh sách sản phẩm trong đơn
+  .card
+    .card-header Danh sách sản phẩm
+    .card-body
+      table.table.table-bordered.table-hover
+        thead
+          tr
+            th STT
+            th Tên sản phẩm
+            th Ảnh
+            th Số lượng
+            th Giá gốc
+            th Giảm giá (%)
+            th Giá sau giảm
+            th Thành tiền
+        tbody
+          each product, index in order.products
+            tr
+              td #{index + 1}
+              td #{product.title}
+              td
+                if product.thumbnail
+                  img(
+                    src=product.thumbnail,
+                    alt=product.title,
+                    style="width:100px;height:100px;object-fit:cover;border-radius:8px;"
+                  )
+                else
+                  span Không có ảnh
+              td #{product.quantity}
+              td #{product.price.toLocaleString()} ₫
+              td #{product.discountPercentage}%
+              td #{product.priceNew.toLocaleString()} đ
+              td #{product.totalPrice.toLocaleString()} ₫
+
+  //- Tổng tiền
+  .card.mt-3
+    .card-body.text-end
+      h5 Tổng cộng:
+      h4.text-danger #{order.totalPrice.toLocaleString()} ₫
+
+  a.btn.btn-secondary.mt-3(href=`${prefixAdmin}/orders`) ← Quay lại danh sách

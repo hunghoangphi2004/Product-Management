@@ -3,24 +3,11 @@ include ../mixins/sub-menu.pug
 header.header
   .container 
     .row.align-items-center
-      .col-3 
+      .col-2 
         .inner-logo 
           a(href="/")
-            img(src="/images/logo.svg", alt="Logo")
-
-      .col-5
-        form(action="/search", method="GET")
-          .form-group.d-flex.mb-0
-            input(
-              type="text",
-              placeholder="Nhập từ khóa...",
-              class="form-control",
-              name="keyword",
-              value=keyword
-            )
-            button(type="submit", class="btn btn-primary") Tìm
-
-      .col-4 
+            img(src=settingGeneral.logo, alt=settingGeneral.websiteName)
+      .col-7
         .inner-menu 
           ul
             li
@@ -44,4 +31,15 @@ header.header
               li
                 a(href="/user/register") Đăng ký
               li #{user} 
+      .col-3
+        form(action="/search", method="GET")
+          .form-group.d-flex.mb-0
+            input(
+              type="text",
+              placeholder="Nhập từ khóa...",
+              class="form-control",
+              name="keyword",
+              value=keyword
+            )
+            button(type="submit", class="btn btn-primary") Tìm
 

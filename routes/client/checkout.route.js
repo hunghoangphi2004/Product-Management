@@ -8,4 +8,6 @@ router.post('/order', checkoutController.order)
 
 router.get('/success/:orderId', checkoutController.success)
 
+router.get("/vnpay_return", checkoutController.vnpayReturn);
+
 module.exports = router

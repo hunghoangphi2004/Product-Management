@@ -8,7 +8,7 @@ const port = process.env.PORT;
 const adminRoute = require('./routes/admin/index.route.js')
 var methodOverride = require('method-override')
 var bodyParser = require('body-parser')
-const moment =require("moment")
+const moment = require("moment")
 
 
 const flash = require('express-flash')
@@ -48,7 +48,15 @@ route(app)
 
 adminRoute(app)
 
-  
+app.get('/{*any}', (req, res) => {
+  res.status(404).render('clients/pages/errors/404', {
+    title: '404 Not Found'
+  });
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

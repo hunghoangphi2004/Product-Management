@@ -5,8 +5,6 @@ const searchHelper = require("../../helpers/search.js");
 const paginationHelper = require("../../helpers/pagination.js");
 const systemConfig = require("../../config/system.js")
 const createTreeHelper = require("../../helpers/createTree.js");
-
-
 const Product = require("../../models/product.model.js");
 const ProductCategory = require("../../models/product-category.model.js");
 const Account = require("../../models/account.model.js")
@@ -35,7 +33,6 @@ module.exports.index = async (req, res) => {
     }
 
     //Sort
-
     let sort = {}
 
     if (req.query.sortKey && req.query.sortValue) {
@@ -55,7 +52,6 @@ module.exports.index = async (req, res) => {
     }, req.query, countProducts);
 
     //    await objectPagination(req, find);
-
     const products = await Product.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip)
     for (const product of products) {
         //Lấy ra thông tin người tạo
@@ -68,7 +64,12 @@ module.exports.index = async (req, res) => {
         const updatedBy = product.updatedBy[product.updatedBy.length - 1];
         if (updatedBy) {
             const userUpdated = await Account.findOne({ _id: updatedBy.account_id })
-            updatedBy.accountFullName = userUpdated.fullname;
+            if(userUpdated){
+                updatedBy.accountFullName = userUpdated.fullname;
+            } else {
+                updatedBy.accountFullName = "Không tồn tại";
+            }
+            
         }
 
     }
@@ -240,6 +241,7 @@ module.exports.editPatch = async (req, res) => {
     }
 }
 
+// [GET] /admin/products/detail/:id
 module.exports.detail = async (req, res) => {
     try {
         const find = {

@@ -1,4 +1,3 @@
-
 //Button Status
 const buttonStatus = document.querySelectorAll('[button-status]');
 if (buttonStatus.length > 0) {
@@ -67,15 +66,17 @@ const CheckboxMulti = document.querySelector('[checkbox-multi]');
 if (CheckboxMulti) {
     const inputCheckAll = CheckboxMulti.querySelector('input[name="checkAll"]');
     const inputIds = CheckboxMulti.querySelectorAll('input[name="id"]');
-    inputCheckAll.addEventListener('click', () => {
-        if (inputCheckAll.checked) {
-            console.log("All checkboxes selected");
-            inputIds.forEach(input => input.checked = true)
-        }
-        else {
-            inputIds.forEach(input => input.checked = false)
-        }
-    })
+    if (inputCheckAll) {
+        inputCheckAll.addEventListener('click', () => {
+            if (inputCheckAll.checked) {
+                console.log("All checkboxes selected");
+                inputIds.forEach(input => input.checked = true)
+            }
+            else {
+                inputIds.forEach(input => input.checked = false)
+            }
+        })
+    }
 
     inputIds.forEach(input => {
         input.addEventListener('click', () => {
@@ -89,6 +90,7 @@ if (CheckboxMulti) {
         })
     })
 }
+
 //End Checbox
 
 
@@ -145,27 +147,26 @@ if (formChangeMulti) {
 const buttonDelete = document.querySelectorAll('[button-delete]');
 if (buttonDelete) {
     const formDeleteItem = document.querySelector('#formDeleteItem');
-    const path = formDeleteItem.getAttribute("data-path");
-    buttonDelete.forEach(button => button.addEventListener('click', () => {
-        const isConfirm = confirm("Bạn có chắc chắn muốn xóa mục này không?");
-        if (isConfirm) {
-            const id = button.getAttribute("data-id");
-            const action = path + `/${id}?_method=DELETE`;
-            formDeleteItem.setAttribute("action", action);
-            formDeleteItem.submit();
-        }
-
-
-    }))
+    console.log(formDeleteItem)
+    if (formDeleteItem) {
+        const path = formDeleteItem.getAttribute("data-path");
+        buttonDelete.forEach(button => button.addEventListener('click', () => {
+            const isConfirm = confirm("Bạn có chắc chắn muốn xóa mục này không?");
+            if (isConfirm) {
+                const id = button.getAttribute("data-id");
+                const action = path + `/${id}?_method=DELETE`;
+                formDeleteItem.setAttribute("action", action);
+                formDeleteItem.submit();
+            }
+        }))
+    }
 }
 //End Delete Item
 
-//Show alert
+// Show alert
 const showAlert = document.querySelector('[show-alert]');
-console.log('showAlert element:', showAlert);
 if (showAlert) {
     const time = parseInt(showAlert.getAttribute("data-time"));
-    console.log('Auto hide time:', time);
     setTimeout(() => {
         showAlert.classList.add("alert-hidden")
     }, time)
@@ -173,13 +174,12 @@ if (showAlert) {
     const closeAlert = showAlert.querySelector('[close-alert]');
     console.log('closeAlert button:', closeAlert);
     if (closeAlert) {
-        console.log('Adding click listener to close button');
         closeAlert.addEventListener('click', () => {
-            console.log('Close button clicked');
+
             showAlert.classList.add("alert-hidden")
         })
     } else {
-        console.log('Close alert button not found'); // Debug 6
+        console.log('Close alert button not found');
     }
 }
 //End Show alert
@@ -216,8 +216,7 @@ if (sort) {
         console.log(stringSort)
         const optionSelected = sortSelect.querySelector(`option[value='${stringSort}']`)
         console.log(optionSelected)
-        optionSelected.selected=true
+        optionSelected.selected = true
     }
 }
-
 //End sort
