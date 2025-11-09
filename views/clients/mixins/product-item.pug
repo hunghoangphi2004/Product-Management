@@ -8,6 +8,8 @@ mixin product-item(item)
             .inner-content
                 h3.inner-title
                     a(href=`/products/detail/${item.slug}`) #{item.title}
-                .inner-price-new #{item.priceNew}$
-                .inner-price-old #{item.price}$
+                .inner-price-new #{item.priceNew} vnđ
+                .inner-price-old #{item.price} vnđ
                 .inner-discount #{item.discountPercentage}%
+            .inner-footer.text-center.my-3
+                a.btn.btn-primary(href=`/products/detail/${item.slug}`) Xem chi tiết

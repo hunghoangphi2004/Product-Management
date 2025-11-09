@@ -1,0 +1,29 @@
+extend ../../layouts/default.pug
+
+block main 
+    h1 Chi tiết người dùng
+
+    if (user.title)
+    h3(class="mb-4") Họ tên: #{user.fullname}
+
+    if (user.email)
+        div(class="mb-4") Email: <b>#{user.email}</b>
+
+    if (user.avatar)
+        div(class="mb-4")
+        img(
+            src=user.avatar
+            style="width: 100px"
+        )
+
+    if (user.status)
+        div(class="mb-4")
+        span Trạng thái: 
+        if (user.status === "active")
+            span(class="btn btn-success") Hoạt động
+        else
+            span(class="btn btn-danger") Ngưng hoạt động
+        <br>
+
+
+    script(src="admin/js/user.js")

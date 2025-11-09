@@ -18,6 +18,9 @@
             if(role.permissions.includes("accounts_view"))
                 li
                     a(href= prefixAdmin + "/accounts") Danh sách tài khoản
+            if(role.permissions.includes("users_view"))
+                li
+                    a(href= prefixAdmin + "/users") Danh sách người dùng
             li
                 a(href= prefixAdmin + "/orders") Danh sách đơn hàng
             li
